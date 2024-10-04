@@ -1,0 +1,28 @@
+from flask import Flask, request
+from twilio.rest import Client
+from twilio.twiml.messaging_response import MessagingResponse
+
+app = Flask(__name__)
+
+account_sid = 'AC318e8032572bf332fa9fab9fac5e7d94'
+auth_token = 'acb49a1309c2446a5ee04760d3a7d458'
+twilio_zap = 'whatsapp:+14155238886'
+
+client = Client(account_sid, auth_token)
+
+@app.route('/webhook', methods=['POST'])
+def zap_resposta():
+    msg = request.form.get('Body')
+    response = MessagingResponse()
+
+    if "oi" in msg.lower():
+        response.message("opa eai")
+    elif "tchau" in msg.lower():
+        response.message("Falou")
+    else:
+        response.message("Desculpa, não entendi")
+    
+    return str(response)
+
+if __name__ == "__main__":
+    app.run(debug=True)
